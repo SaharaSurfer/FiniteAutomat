@@ -19,20 +19,22 @@ std::string SubstringFinder::getPattern()
 
 std::vector<size_t> SubstringFinder::operator()(std::string text)
 {
-	setTransitions(text.size());
-	state current_state = state(0, 0);
-
 	std::vector<size_t> results;
 
-	while (current_state.second < text.size())
+	if (text.size() < pattern.size())
 	{
-		bool signal = pattern[current_state.first] == text[current_state.second];
-		current_state = getNextState(current_state, signal);
+		return results;
+	}
+	
+	size_t current_state = 0;
+	for (size_t signal_ind = 0; signal_ind < text.size(); signal_ind++)
+	{
+		current_state = transition(current_state, text[signal_ind]);
 
-		if (current_state.first == pattern.size())
+		if (current_state == pattern.size())
 		{
-			results.push_back( current_state.second - current_state.first );
-			current_state.first = prefixes[current_state.first - 1];
+			results.push_back(signal_ind - current_state + 1);
+			current_state = prefixes[current_state - 1];
 		}
 	}
 	return results;
@@ -57,21 +59,11 @@ void SubstringFinder::prefixFunction()
 	}
 }
 
-void SubstringFinder::setTransitions(size_t text_size)
+size_t SubstringFinder::transition(size_t current_state, char signal)
 {
-	transitions.clear();
-
-	for (size_t i = 0; i < pattern.size(); i++)
+	while (current_state > 0 && pattern[current_state] != signal) 
 	{
-		for (size_t j = 0; j < text_size; j++)
-		{
-			transitions[std::make_pair(state(i, j), true)] = state(i + 1, j + 1);
-			transitions[std::make_pair(state(i, j), false)] = i != 0 ? state(prefixes[i - 1], j) : state(i, j + 1);
-		}
+		current_state = prefixes[current_state - 1];
 	}
-}
-
-state SubstringFinder::getNextState(state current_state, bool signal)
-{
-	return transitions[std::make_pair(current_state, signal)];
+	return (pattern[current_state] == signal) ? current_state + 1 : 0;
 }

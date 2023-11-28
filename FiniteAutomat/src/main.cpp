@@ -4,8 +4,8 @@
 
 int main()
 {
-	std::string pattern = "xyz";
-	std::string text = "abcuvwxyz";
+	std::string pattern = "abab";
+	std::string text = "abababxyz";
 
 	SubstringFinder kmp(pattern);
 

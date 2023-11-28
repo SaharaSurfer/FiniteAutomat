@@ -4,8 +4,6 @@
 #include <map>
 #include <string>
 
-typedef std::pair<size_t, size_t> state;
-
 class SubstringFinder
 {
 public:
@@ -18,10 +16,7 @@ public:
 private:
 	std::string pattern;
 	std::vector<size_t> prefixes;
-	std::map<std::pair<state, bool>, state> transitions;
 
 	void prefixFunction();
-
-	void setTransitions(size_t text_size);
-	state getNextState(state current_state, bool signal);
+	size_t transition(size_t current_state, char signal);
 };
