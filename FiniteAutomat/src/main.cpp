@@ -1,18 +1,21 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include "../header/SubstringFinder.h"
 
 int main()
 {
-	std::string pattern = "abab";
-	std::string text = "abababxyz";
+	//std::vector<int> p = { 1, 2, 1, 2 };
+	//std::vector<int> t = { 1, 2, 1, 2, 1, 2, 5, 6, 7 };
+	std::string p = "abab";
+	std::string t = "abababxyz";
 
-	SubstringFinder kmp(pattern);
-
-	std::vector<size_t> indexes = kmp(text);
+	SubstringFinder< std::string > kmp(p);
+	
+	std::vector<size_t> indexes = kmp(t);
 	if (indexes.empty())
 	{
-		std::cout << "Pattern was not found!";
+		std::cout << "Pattern was not found!\n";
 	}
 	else 
 	{
